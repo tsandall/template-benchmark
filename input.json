@@ -6,11 +6,31 @@
             "version": "v1"
         },
         "object": {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "labels": {
+                    "owner": "me.agilebank.demo"
+                },
+                "name": "opa",
+                "namespace": "production"
+            },
             "spec": {
                 "containers": [
                     {
-                        "image": "openpolicyagent/opa:0.22.0",
-                        "name": "opa"
+                        "args": [
+                            "run",
+                            "--server",
+                            "--addr=localhost:8080"
+                        ],
+                        "image": "openpolicyagent/opa:0.9.2",
+                        "name": "opa",
+                        "resources": {
+                            "limits": {
+                                "cpu": "100m",
+                                "memory": "30Mi"
+                            }
+                        }
                     }
                 ]
             }
