@@ -155,7 +155,7 @@ kind_matches(ks) {
 ########################
 
 matches_scope(match) {
-  not has_field(match, "scope")
+  not match.scope
 }
 
 matches_scope(match) {
@@ -178,7 +178,7 @@ matches_scope(match) {
 
 # match_expression_violated checks to see if a match expression is violated.
 match_expression_violated("In", labels, key, values) = true {
-  has_field(labels, key) == false
+  not labels.key
 }
 
 match_expression_violated("In", labels, key, values) = true {
@@ -197,11 +197,11 @@ match_expression_violated("NotIn", labels, key, values) = true {
 }
 
 match_expression_violated("Exists", labels, key, values) = true {
-  has_field(labels, key) == false
+  not labels.key
 }
 
 match_expression_violated("DoesNotExist", labels, key, values) = true {
-  has_field(labels, key) == true
+  labels.key
 }
 
 
@@ -309,17 +309,17 @@ always_match_ns_selectors(match) {
 }
 
 matches_namespaces(match) {
-  not has_field(match, "namespaces")
+  not match.namespaces
 }
 
 # Always match cluster scoped resources, unless resource is namespace
 matches_namespaces(match) {
-  has_field(match, "namespaces")
+  match.namespaces
   always_match_ns_selectors(match)
 }
 
 matches_namespaces(match) {
-  has_field(match, "namespaces")
+  match.namespaces
   not always_match_ns_selectors(match)
   get_ns_name[ns]
   nss := {n | n = match.namespaces[_]}
@@ -327,17 +327,17 @@ matches_namespaces(match) {
 }
 
 does_not_match_excludednamespaces(match) {
-  not has_field(match, "excludedNamespaces")
+  not match.excludedNamespaces
 }
 
 # Always match cluster scoped resources, unless resource is namespace
 does_not_match_excludednamespaces(match) {
-  has_field(match, "excludedNamespaces")
+  match.excludedNamespaces
   always_match_ns_selectors(match)
 }
 
 does_not_match_excludednamespaces(match) {
-  has_field(match, "excludedNamespaces")
+  match.excludedNamespaces
   not always_match_ns_selectors(match)
   get_ns_name[ns]
   nss := {n | n = match.excludedNamespaces[_]}
@@ -345,19 +345,19 @@ does_not_match_excludednamespaces(match) {
 }
 
 matches_nsselector(match) {
-  not has_field(match, "namespaceSelector")
+  not match.namespaceSelector
 }
 
 # Always match cluster scoped resources, unless resource is namespace
 matches_nsselector(match) {
-  has_field(match, "namespaceSelector")
+  match.namespaceSelector
   always_match_ns_selectors(match)
 }
 
 matches_nsselector(match) {
   not is_ns(input.review.kind)
   not always_match_ns_selectors(match)
-  has_field(match, "namespaceSelector")
+  match.namespaceSelector
   get_ns[ns]
   matches_namespace_selector(match, ns)
 }
@@ -366,7 +366,7 @@ matches_nsselector(match) {
 matches_nsselector(match) {
   is_ns(input.review.kind)
   not always_match_ns_selectors(match)
-  has_field(match, "namespaceSelector")
+  match.namespaceSelector
   any_labelselector_match(object.get(match, "namespaceSelector", {}))
 }
 
