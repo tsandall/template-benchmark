@@ -1,8 +1,19 @@
 {
     "review": {
         "kind": {
+            "group": "",
             "kind": "Pod",
             "version": "v1"
+        },
+        "object": {
+            "spec": {
+                "containers": [
+                    {
+                        "image": "openpolicyagent/opa:0.22.0",
+                        "name": "opa"
+                    }
+                ]
+            }
         }
     }
 }

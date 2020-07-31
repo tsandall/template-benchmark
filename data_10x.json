@@ -1,0 +1,296 @@
+{
+    "constraints": {
+        "K8sAllowedRepos": {
+            "prod-repo-is-openpolicyagent-001": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-001"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-002": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-002"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-003": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-003"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-004": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-004"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-005": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-005"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-006": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-006"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-007": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-007"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-008": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-008"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-009": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-009"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            },
+            "prod-repo-is-openpolicyagent-010": {
+                "apiVersion": "constraints.gatekeeper.sh/v1beta1",
+                "kind": "K8sAllowedRepos",
+                "metadata": {
+                    "name": "prod-repo-is-openpolicyagent-010"
+                },
+                "spec": {
+                    "match": {
+                        "kinds": [
+                            {
+                                "apiGroups": [
+                                    ""
+                                ],
+                                "kinds": [
+                                    "Pod"
+                                ]
+                            }
+                        ],
+                        "namespaces": [
+                            "production"
+                        ]
+                    },
+                    "parameters": {
+                        "repos": [
+                            "only-this-repo"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
