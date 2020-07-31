@@ -1,4 +1,4 @@
-package k8sallowedrepos
+package templates.target.k8sallowedrepos
 
 violation[{"msg": msg}] {
   container := input.review.object.spec.containers[_]

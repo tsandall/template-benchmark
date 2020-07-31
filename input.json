@@ -1,0 +1,8 @@
+{
+    "review": {
+        "kind": {
+            "kind": "Pod",
+            "version": "v1"
+        }
+    }
+}

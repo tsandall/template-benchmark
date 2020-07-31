@@ -1,7 +1,7 @@
-package hooks["{{.Target}}"]
+package hooks["target"]
 
 violation[response] {
-	data.hooks["{{.Target}}"].library.autoreject_review[rejection]
+	data.hooks["target"].library.autoreject_review[rejection]
 	review := get_default(input, "review", {})
 	constraint := get_default(rejection, "constraint", {})
 	spec := get_default(constraint, "spec", {})
@@ -17,14 +17,14 @@ violation[response] {
 
 # Finds all violations for a given target
 violation[response] {
-	data.hooks["{{.Target}}"].library.matching_constraints[constraint]
+	data.hooks["target"].library.matching_constraints[constraint]
 	review := get_default(input, "review", {})
 	inp := {
 		"review": review,
 		"parameters": get_default(get_default(constraint, "spec", {}), "parameters", {}),
 	}
 	inventory[inv]
-	data.templates["{{.Target}}"][constraint.kind].violation[r] with input as inp with data.inventory as inv
+	data.templates["target"][constraint.kind].violation[r] with input as inp with data.inventory as inv
 	spec := get_default(constraint, "spec", {})
 	enforcementAction := get_default(spec, "enforcementAction", "deny")
 	response = {
@@ -39,13 +39,13 @@ violation[response] {
 
 # Finds all violations in the cached state of a given target
 audit[response] {
-	data.hooks["{{.Target}}"].library.matching_reviews_and_constraints[[review, constraint]]
+	data.hooks["target"].library.matching_reviews_and_constraints[[review, constraint]]
 	inp := {
 		"review": review,
 		"parameters": get_default(get_default(constraint, "spec", {}), "parameters", {}),
 	}
 	inventory[inv]
-	data.templates["{{.Target}}"][constraint.kind].violation[r] with input as inp with data.inventory as inv
+	data.templates["target"][constraint.kind].violation[r] with input as inp with data.inventory as inv
 	spec := get_default(constraint, "spec", {})
 	enforcementAction := get_default(spec, "enforcementAction", "deny")
 	response = {
@@ -60,11 +60,11 @@ audit[response] {
 # get_default(data, "external", {}) seems to cause this error:
 # "rego_type_error: undefined function data.hooks.<target>.get_default"
 inventory[inv] {
-	inv = data.external["{{.Target}}"]
+	inv = data.external["target"]
 }
 
 inventory[{}] {
-	not data.external["{{.Target}}"]
+	not data.external["target"]
 }
 
 # get_default returns the value of an object's field or the provided default value.

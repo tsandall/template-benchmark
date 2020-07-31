@@ -1,15 +1,15 @@
-package target
+package hooks.target.library
 
 ##################
 # Required Hooks #
 ##################
 
 autoreject_review[rejection] {
-  constraint := data["{{.ConstraintsRoot}}"][_][_]
+  constraint := data["constraints"][_][_]
   spec := get_default(constraint, "spec", {})
   match := get_default(spec, "match", {})
   has_field(match, "namespaceSelector")
-  not data["{{.DataRoot}}"].cluster["v1"]["Namespace"][input.review.namespace]
+  not data["inventory"].cluster["v1"]["Namespace"][input.review.namespace]
   not input.review._unstable.namespace
   not input.review.namespace == ""
   rejection := {
@@ -20,7 +20,7 @@ autoreject_review[rejection] {
 }
 
 matching_constraints[constraint] {
-  constraint := data["{{.ConstraintsRoot}}"][_][_]
+  constraint := data["constraints"][_][_]
   spec := get_default(constraint, "spec", {})
   match := get_default(spec, "match", {})
 
@@ -40,7 +40,7 @@ matching_constraints[constraint] {
 
 # Namespace-scoped objects
 matching_reviews_and_constraints[[review, constraint]] {
-  obj = data["{{.DataRoot}}"].namespace[namespace][api_version][kind][name]
+  obj = data["inventory"].namespace[namespace][api_version][kind][name]
   r := make_review(obj, api_version, kind, name)
   review := add_field(r, "namespace", namespace)
   matching_constraints[constraint] with input as {"review": review}
@@ -48,7 +48,7 @@ matching_reviews_and_constraints[[review, constraint]] {
 
 # Cluster-scoped objects
 matching_reviews_and_constraints[[review, constraint]] {
-  obj = data["{{.DataRoot}}"].cluster[api_version][kind][name]
+  obj = data["inventory"].cluster[api_version][kind][name]
   review = make_review(obj, api_version, kind, name)
   matching_constraints[constraint] with input as {"review": review}
 }
@@ -290,7 +290,7 @@ get_ns[out] {
 
 get_ns[out] {
   not input.review._unstable.namespace
-  out := data["{{.DataRoot}}"].cluster["v1"]["Namespace"][input.review.namespace]
+  out := data["inventory"].cluster["v1"]["Namespace"][input.review.namespace]
 }
 
 get_ns_name[out] {
