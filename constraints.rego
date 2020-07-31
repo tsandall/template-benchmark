@@ -2,13 +2,13 @@ package hooks["target"]
 
 violation[response] {
 	data.hooks["target"].library.autoreject_review[rejection]
-	review := get_default(input, "review", {})
-	constraint := get_default(rejection, "constraint", {})
-	spec := get_default(constraint, "spec", {})
-	enforcementAction := get_default(spec, "enforcementAction", "deny")
+	review := object.get(input, "review", {})
+	constraint := object.get(rejection, "constraint", {})
+	spec := object.get(constraint, "spec", {})
+	enforcementAction := object.get(spec, "enforcementAction", "deny")
 	response = {
-		"msg": get_default(rejection, "msg", ""),
-		"metadata": {"details": get_default(rejection, "details", {})},
+		"msg": object.get(rejection, "msg", ""),
+		"metadata": {"details": object.get(rejection, "details", {})},
 		"constraint": constraint,
 		"review": review,
 		"enforcementAction": enforcementAction,
@@ -18,18 +18,18 @@ violation[response] {
 # Finds all violations for a given target
 violation[response] {
 	data.hooks["target"].library.matching_constraints[constraint]
-	review := get_default(input, "review", {})
+	review := object.get(input, "review", {})
 	inp := {
 		"review": review,
-		"parameters": get_default(get_default(constraint, "spec", {}), "parameters", {}),
+		"parameters": object.get(object.get(constraint, "spec", {}), "parameters", {}),
 	}
 	inventory[inv]
 	data.templates["target"][constraint.kind].violation[r] with input as inp with data.inventory as inv
-	spec := get_default(constraint, "spec", {})
-	enforcementAction := get_default(spec, "enforcementAction", "deny")
+	spec := object.get(constraint, "spec", {})
+	enforcementAction := object.get(spec, "enforcementAction", "deny")
 	response = {
 		"msg": r.msg,
-		"metadata": {"details": get_default(r, "details", {})},
+		"metadata": {"details": object.get(r, "details", {})},
 		"constraint": constraint,
 		"review": review,
 		"enforcementAction": enforcementAction,
@@ -42,15 +42,15 @@ audit[response] {
 	data.hooks["target"].library.matching_reviews_and_constraints[[review, constraint]]
 	inp := {
 		"review": review,
-		"parameters": get_default(get_default(constraint, "spec", {}), "parameters", {}),
+		"parameters": object.get(object.get(constraint, "spec", {}), "parameters", {}),
 	}
 	inventory[inv]
 	data.templates["target"][constraint.kind].violation[r] with input as inp with data.inventory as inv
-	spec := get_default(constraint, "spec", {})
-	enforcementAction := get_default(spec, "enforcementAction", "deny")
+	spec := object.get(constraint, "spec", {})
+	enforcementAction := object.get(spec, "enforcementAction", "deny")
 	response = {
 		"msg": r.msg,
-		"metadata": {"details": get_default(r, "details", {})},
+		"metadata": {"details": object.get(r, "details", {})},
 		"constraint": constraint,
 		"review": review,
 		"enforcementAction": enforcementAction,

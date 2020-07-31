@@ -6,12 +6,12 @@ package hooks.target.library
 
 autoreject_review[rejection] {
   constraint := data["constraints"][_][_]
-  spec := get_default(constraint, "spec", {})
-  match := get_default(spec, "match", {})
-  has_field(match, "namespaceSelector")
+  spec := object.get(constraint, "spec", {})
+  match := object.get(spec, "match", {})
   not data["inventory"].cluster["v1"]["Namespace"][input.review.namespace]
   not input.review._unstable.namespace
   not input.review.namespace == ""
+  has_field(match, "namespaceSelector")
   rejection := {
     "msg": "Namespace is not cached in OPA.",
     "details": {},
@@ -21,8 +21,8 @@ autoreject_review[rejection] {
 
 matching_constraints[constraint] {
   constraint := data["constraints"][_][_]
-  spec := get_default(constraint, "spec", {})
-  match := get_default(spec, "match", {})
+  spec := object.get(constraint, "spec", {})
+  match := object.get(spec, "match", {})
 
   any_kind_selector_matches(match)
 
@@ -34,7 +34,7 @@ matching_constraints[constraint] {
 
   matches_scope(match)
 
-  label_selector := get_default(match, "labelSelector", {})
+  label_selector := object.get(match, "labelSelector", {})
   any_labelselector_match(label_selector)
 }
 
@@ -77,10 +77,10 @@ make_group_version(api_version) = [group, version] {
   version := api_version
 }
 
-add_field(object, key, value) = ret {
-  keys := {k | object[k]}
+add_field(obj, key, value) = ret {
+  keys := {k | obj[k]}
   allKeys = keys | {key}
-  ret := {k: v | v = get_default(object, k, value); allKeys[k]}
+  ret := {k: v | v = object.get(obj, k, value); allKeys[k]}
 }
 
 # has_field returns whether an object has a field
@@ -124,7 +124,7 @@ get_default(object, field, _default) = output {
 #######################
 
 any_kind_selector_matches(match) {
-  kind_selectors := get_default(match, "kinds", [{"apiGroups": ["*"], "kinds": ["*"]}])
+  kind_selectors := object.get(match, "kinds", [{"apiGroups": ["*"], "kinds": ["*"]}])
   ks := kind_selectors[_]
   kind_selector_matches(ks)
 }
@@ -164,12 +164,12 @@ matches_scope(match) {
 
 matches_scope(match) {
   match.scope == "Namespaced"
-  get_default(input.review, "namespace", "") != ""
+  object.get(input.review, "namespace", "") != ""
 }
 
 matches_scope(match) {
   match.scope == "Cluster"
-  get_default(input.review, "namespace", "") == ""
+  object.get(input.review, "namespace", "") == ""
 }
 
 ########################
@@ -209,55 +209,55 @@ match_expression_violated("DoesNotExist", labels, key, values) = true {
 # A non-existent selector or labels should be represented by an empty object ("{}")
 matches_label_selector(selector, labels) {
   keys := {key | labels[key]}
-  matchLabels := get_default(selector, "matchLabels", {})
+  matchLabels := object.get(selector, "matchLabels", {})
   satisfiedMatchLabels := {key | matchLabels[key] == labels[key]}
   count(satisfiedMatchLabels) == count(matchLabels)
 
-  matchExpressions := get_default(selector, "matchExpressions", [])
+  matchExpressions := object.get(selector, "matchExpressions", [])
 
   mismatches := {failure | failure = true; failure = match_expression_violated(
     matchExpressions[i]["operator"],
     labels,
     matchExpressions[i]["key"],
-    get_default(matchExpressions[i], "values", []))}
+    object.get(matchExpressions[i], "values", []))}
 
   any(mismatches) == false
 }
 
 # object exists, old object is undefined
 any_labelselector_match(label_selector) {
-  get_default(input.review, "oldObject", {}) == {}
-  get_default(input.review, "object", {}) != {}
+  object.get(input.review, "oldObject", {}) == {}
+  object.get(input.review, "object", {}) != {}
 
-  obj := get_default(input.review, "object", {})
-  metadata := get_default(obj, "metadata", {})
-  labels := get_default(metadata, "labels", {})
+  obj := object.get(input.review, "object", {})
+  metadata := object.get(obj, "metadata", {})
+  labels := object.get(metadata, "labels", {})
   matches_label_selector(label_selector, labels)
 }
 
 # old object exists, object is undefined
 any_labelselector_match(label_selector) {
-  get_default(input.review, "oldObject", {}) != {}
-  get_default(input.review, "object", {}) == {}
+  object.get(input.review, "oldObject", {}) != {}
+  object.get(input.review, "object", {}) == {}
 
-  obj := get_default(input.review, "oldObject", {})
-  metadata := get_default(obj, "metadata", {})
-  labels := get_default(metadata, "labels", {})
+  obj := object.get(input.review, "oldObject", {})
+  metadata := object.get(obj, "metadata", {})
+  labels := object.get(metadata, "labels", {})
   matches_label_selector(label_selector, labels)
 }
 
 # both object and old object are defined
 any_labelselector_match(label_selector) {
-  get_default(input.review, "oldObject", {}) != {}
-  get_default(input.review, "object", {}) != {}
+  object.get(input.review, "oldObject", {}) != {}
+  object.get(input.review, "object", {}) != {}
 
-  obj := get_default(input.review, "object", {})
-  metadata := get_default(obj, "metadata", {})
-  labels := get_default(metadata, "labels", {})
+  obj := object.get(input.review, "object", {})
+  metadata := object.get(obj, "metadata", {})
+  labels := object.get(metadata, "labels", {})
 
-  old_obj := get_default(input.review, "oldObject", {})
-  old_metadata := get_default(old_obj, "metadata", {})
-  old_labels := get_default(old_metadata, "labels", {})
+  old_obj := object.get(input.review, "oldObject", {})
+  old_metadata := object.get(old_obj, "metadata", {})
+  old_labels := object.get(old_metadata, "labels", {})
 
   all_labels := [labels, old_labels]
   matches := {matches | l := all_labels[_]; matches := matches_label_selector(label_selector, l)}
@@ -268,8 +268,8 @@ any_labelselector_match(label_selector) {
 # neither object nor old object are defined
 # this should never happen, included for completeness
 any_labelselector_match(label_selector) {
-  get_default(input.review, "oldObject", {}) == {}
-  get_default(input.review, "object", {}) == {}
+  object.get(input.review, "oldObject", {}) == {}
+  object.get(input.review, "object", {}) == {}
 
   labels = {}
   matches_label_selector(label_selector, labels)
@@ -305,7 +305,7 @@ get_ns_name[out] {
 
 always_match_ns_selectors(match) {
   not is_ns(input.review.kind)
-  get_default(input.review, "namespace", "") == ""
+  object.get(input.review, "namespace", "") == ""
 }
 
 matches_namespaces(match) {
@@ -367,15 +367,15 @@ matches_nsselector(match) {
   is_ns(input.review.kind)
   not always_match_ns_selectors(match)
   has_field(match, "namespaceSelector")
-  any_labelselector_match(get_default(match, "namespaceSelector", {}))
+  any_labelselector_match(object.get(match, "namespaceSelector", {}))
 }
 
 
 # Checks to see if a kubernetes NamespaceSelector matches a namespace with a given set of labels
 # A non-existent selector or labels should be represented by an empty object ("{}")
 matches_namespace_selector(match, ns) {
-  metadata := get_default(ns, "metadata", {})
-  nslabels := get_default(metadata, "labels", {})
-  namespace_selector := get_default(match, "namespaceSelector", {})
+  metadata := object.get(ns, "metadata", {})
+  nslabels := object.get(metadata, "labels", {})
+  namespace_selector := object.get(match, "namespaceSelector", {})
   matches_label_selector(namespace_selector, nslabels)
 }
